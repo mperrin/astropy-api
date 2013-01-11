@@ -1,4 +1,4 @@
-#!/usr/bin/python
+﻿#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function
@@ -267,6 +267,11 @@ c.l
 c = HorizontalCoordinates(alt, az, epoch=timeobj)
 
 
+# Coordinates located on the Earth (for instance, the location of an observatory)
+# can also be represented.
+c = LatitudeLongitude(lat, lon)
+
+
 # Coordinate Factory
 # ------------------
 '''
@@ -333,6 +338,21 @@ class CustomCoordinate(BaseCoordinate):
 # allows both ways of converting
 mycoord1 = c.my_coord
 mycoord2 = c.convert_to(CustomCoordinate)
+
+
+# Conversions from celestial to horizontal
+# ----------------------------------------
+#
+# It is possible to convert to alt/az if one does specify a location and time.
+
+kpno = LatitudeLongitude(31.9583, -111.5967, unit=(u.degree, u.degree))
+obstime = astropy.time.Time('2014-01-15 01:02:03', scale='utc')
+altaz = c.convert_to(HorizontalCoordinate, location=kpno, time=obstime)
+
+# Because the above conversion is a particularly common one, there is 
+# a more convenient syntax as well:
+
+altaz = c.observe_from(kpno, obstime)
 
 
 # Separations
